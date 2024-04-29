@@ -3,3 +3,4 @@ streamlit_option_menu
 mysql.connector
 scikit-learn
 reportlab
+localhost:3306
