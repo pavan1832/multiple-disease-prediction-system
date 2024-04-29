@@ -52,11 +52,7 @@ def login_page():
         else:
             st.error("Invalid username or password. Please try again.")
 
-if __name__ == "__main__":
-    if 'user' not in st.session_state:
-        login_page()
-    else:
-        show_main_page()
+
         
 with st.sidebar:
        if 'user' in st.session_state:
