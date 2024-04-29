@@ -28,7 +28,7 @@ if selected == 'Diabetes Prediction':
 
     st.title('Diabetes Prediction using ML')
     with st.form(key='diabetes_form'):
-        pregnancies = st.number_input('Number of Pregnancies', min_value=0, step=1)
+        pregnancies = st.number_input('Number of Pregnancies')
         glucose = st.number_input('Glucose Level')
         blood_pressure = st.number_input('Blood Pressure value')
         skin_thickness = st.number_input('Skin Thickness value')
@@ -40,7 +40,7 @@ if selected == 'Diabetes Prediction':
         submitted = st.form_submit_button('Diabetes Test Result')
 
     if submitted:
-        if any([pregnancies == 0, glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
+        if any([glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
             st.warning('Please fill in all details to get the Diabetes test result.')
         else:
             user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
