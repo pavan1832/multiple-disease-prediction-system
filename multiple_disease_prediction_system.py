@@ -2,7 +2,7 @@ import pickle
 import streamlit as st
 
 
-from streamlit_option_menu import option_menu
+
 
 diabetes_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/diabetes_model.sav","rb"))
 heart_disease_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/heart_disease_model.sav","rb"))
