@@ -1,0 +1,3 @@
+streamlit run C:\Users\Pavan\OneDrive\Desktop\multiple decision system\multiple.py
+
+streamlit run "C:\Users\Pavan\OneDrive\Desktop\multiple decision system\login.py"
