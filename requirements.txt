@@ -1,0 +1,6 @@
+streamlit
+streamlit_option_menu
+mysql.connector
+time
+streamlit.runtime.scriptrunner
+streamlit.source_util 
