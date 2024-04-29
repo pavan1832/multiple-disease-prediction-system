@@ -5,13 +5,17 @@ import streamlit as st
 
 from streamlit_option_menu import option_menu
 
+def show_main_page():
+   st.subheader('We Care Hospitals')
+   st.title('Sucessfully Logged in')
+
 diabetes_model = pickle.load(open("diabetes_model.sav","rb"))
 heart_disease_model = pickle.load(open("heart_disease_model.sav","rb"))
 parkinsons_model= pickle.load(open("parkinsons_model.sav","rb"))
 
 
 
-
+show_main_page()
 with st.sidebar:
     selected = option_menu('Multiple Disease Prediction System',
 
