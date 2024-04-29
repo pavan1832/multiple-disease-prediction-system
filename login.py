@@ -48,7 +48,7 @@ def login_page():
             st.session_state.user = user
             st.success("Login successful!")
             sleep(0.5)
-            st.switch_page("pages/multiple_disease_prediction_system.py")
+            st.switch_page("multiple_disease_prediction_system.py")
         else:
             st.error("Invalid username or password. Please try again.")
 
