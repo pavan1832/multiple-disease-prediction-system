@@ -6,8 +6,8 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 
 def show_main_page():
-   st.subheader('We Care Hospitals')
-   st.title('Sucessfully Logged in')
+   
+   st.title('We Care Hospitals')
 
 diabetes_model = pickle.load(open("diabetes_model.sav","rb"))
 heart_disease_model = pickle.load(open("heart_disease_model.sav","rb"))
