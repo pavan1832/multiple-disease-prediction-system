@@ -2,3 +2,4 @@ streamlit
 streamlit_option_menu
 mysql.connector
 scikit-learn
+reportlab
