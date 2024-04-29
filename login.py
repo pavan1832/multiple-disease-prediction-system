@@ -1,6 +1,6 @@
 import streamlit as st
 import mysql.connector
-from multiple_disease_prediction_system.py import show_main_page
+from multiple_disease_prediction_system import show_main_page
 from time import sleep
 from streamlit.runtime.scriptrunner import get_script_run_ctx
 from streamlit.source_util import get_pages
