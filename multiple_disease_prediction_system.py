@@ -1,70 +1,60 @@
 import pickle
 import streamlit as st
-
-
-
 from streamlit_option_menu import option_menu
 
-def show_main_page():
-   
-   st.title('We Care Hospitals')
+# Load models
+diabetes_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/diabetes_model.sav", "rb"))
+heart_disease_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/heart_disease_model.sav", "rb"))
+parkinsons_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/parkinsons_model.sav", "rb"))
 
-diabetes_model = pickle.load(open("diabetes_model.sav","rb"))
-heart_disease_model = pickle.load(open("heart_disease_model.sav","rb"))
-parkinsons_model= pickle.load(open("parkinsons_model.sav","rb"))
-
-
-
-show_main_page()
+# Sidebar menu
 with st.sidebar:
-    selected = option_menu('Multiple Disease Prediction System',
+    selected = option_menu(
+        'Multiple Disease Prediction System',
+        ['Diabetes Prediction', 'Heart Disease Prediction', 'Parkinsons Prediction'],
+        menu_icon='hospital-fill',
+        icons=['activity', 'heart', 'person'],
+        default_index=0
+    )
 
-                           ['Diabetes Prediction',
-                            'Heart Disease Prediction',
-                            'Parkinsons Prediction'],
-                           menu_icon='hospital-fill',
-                           icons=['activity', 'heart', 'person'],
-                           default_index=0)
+def show_main_page():
+    st.title('Successfully logged in')
 
-
-#diabetes prediction system
+# Diabetes Prediction Page
 if selected == 'Diabetes Prediction':
-
     st.title('Diabetes Prediction using ML')
-    with st.form(key='diabetes_form'):
-        pregnancies = st.number_input('Number of Pregnancies')
-        glucose = st.number_input('Glucose Level')
-        blood_pressure = st.number_input('Blood Pressure value')
-        skin_thickness = st.number_input('Skin Thickness value')
-        insulin = st.number_input('Insulin Level')
-        bmi = st.number_input('BMI value')
-        diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value')
-        age = st.number_input('Age of the Person', min_value=0, step=1)
 
-        submitted = st.form_submit_button('Diabetes Test Result')
+    gender = st.selectbox('Gender', ['Female', 'Male'])
 
-    if submitted:
-        if any([glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
-            st.warning('Please fill in all details to get the Diabetes test result.')
-        else:
-            user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
-            diab_prediction = diabetes_model.predict([user_input])
-            if diab_prediction[0] == 1:
-                st.success('The person is diabetic')
-            else:
-                st.success('The person is not diabetic')
+    if gender == 'Male':
+        st.warning('Diabetes prediction for males does not require pregnancy information and cannot be performed.')
+    else:
+        with st.form(key='diabetes_form'):
+            pregnancies = st.number_input('Number of Pregnancies', min_value=0, step=1)
+            glucose = st.number_input('Glucose Level')
+            blood_pressure = st.number_input('Blood Pressure value')
+            skin_thickness = st.number_input('Skin Thickness value')
+            insulin = st.number_input('Insulin Level')
+            bmi = st.number_input('BMI value')
+            diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value')
+            age = st.number_input('Age of the Person', min_value=0, step=1)
 
+            submitted = st.form_submit_button('Diabetes Test Result')
+            if submitted:
+                if any([pregnancies == 0, glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
+                    st.warning('Please fill in all details to get the Diabetes test result.')
+                else:
+                    user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
+                    diab_prediction = diabetes_model.predict([user_input])
+                    if diab_prediction[0] == 1:
+                        st.success('The person is diabetic')
+                    else:
+                        st.success('The person is not diabetic')
 
-   
-
- 
 # Heart Disease Prediction Page
-if (selected == 'Heart Disease Prediction'):
-
-    # page title
+if selected == 'Heart Disease Prediction':
     st.title('Heart Disease Prediction using ML')
 
-   
     with st.form(key='heart_disease_form'):
         age = st.number_input('Age', min_value=0, step=1)
         sex = st.selectbox('Sex', ['Male', 'Female'])
@@ -83,11 +73,9 @@ if (selected == 'Heart Disease Prediction'):
         submitted = st.form_submit_button('Heart Disease Test Result')
 
     if submitted:
-       
         if any([age == 0, trestbps == 0, chol == 0, thalach == 0, oldpeak == 0]):
             st.warning('Please fill in all required details to get the Heart Disease test result.')
         else:
-            # Encode categorical features
             sex_encoded = 1 if sex == 'Male' else 0
             cp_encoded = ['Typical Angina', 'Atypical Angina', 'Non-anginal Pain', 'Asymptomatic'].index(cp)
             fbs_encoded = 1 if fbs == 'Yes' else 0
@@ -96,24 +84,20 @@ if (selected == 'Heart Disease Prediction'):
             slope_encoded = ['Upsloping', 'Flat', 'Downsloping'].index(slope)
             thal_encoded = ['Normal', 'Fixed Defect', 'Reversible Defect'].index(thal)
 
-          
             user_input = [age, sex_encoded, cp_encoded, trestbps, chol, fbs_encoded, restecg_encoded, thalach, exang_encoded, oldpeak, slope_encoded, ca, thal_encoded]
-
-            
             heart_prediction = heart_disease_model.predict([user_input])
 
-           
             if heart_prediction[0] == 1:
                 st.success('The person is diagnosed with heart disease.')
             else:
                 st.success('The person does not have heart disease.')
 
-   
+# Parkinson's Prediction Page
 if selected == "Parkinsons Prediction":
+    st.title("Parkinson's Prediction using ML")
 
-    
     with st.form(key='parkinsons_form'):
-        jil = st.number_input('Jitter (local)', format="%.2f")  # Display input as entered (up to 2 decimal places)
+        jil = st.number_input('Jitter (local)', format="%.2f")
         jia = st.number_input('Jitter (local, absolute)', format="%.2f")
         ji_rap = st.number_input('Jitter (rap)', format="%.5f")
         ji_ppq = st.number_input('Jitter (ppq5)', format="%.2f")
@@ -143,25 +127,17 @@ if selected == "Parkinsons Prediction":
         class_info = st.number_input('Class information', format="%.2f")
 
         submitted = st.form_submit_button("Click below to view results")
-        
 
-   
-    parkinsons_diagnosis = ''
-
-      
-    if st.button("Parkinson's Test Result"):
-
-        user_input = [jil,jia,ji_rap,ji_ppq,ddp,shi_loc,shi_db,shi_apq3,shi_apq5,shi_apq11,shi_dda,ac,nth,htn,med,men,sta_dev,min_pit,max_pit,no,no_per,me_per,sta,fra,no_vb,deg,updrs,class_info]
+    if submitted:
+        user_input = [
+            jil, jia, ji_rap, ji_ppq, ddp, shi_loc, shi_db, shi_apq3, shi_apq5, shi_apq11, shi_dda, ac, nth, htn, med, men,
+            sta_dev, min_pit, max_pit, no, no_per, me_per, sta, fra, no_vb, deg, updrs, class_info
+        ]
 
         user_input = [float(x) for x in user_input]
-    
         parkinsons_prediction = parkinsons_model.predict([user_input])
 
         if parkinsons_prediction[0] == 1:
-            parkinsons_diagnosis = "The person has Parkinson's disease"
+            st.success("The person has Parkinson's disease")
         else:
-            parkinsons_diagnosis = "The person does not have Parkinson's disease"
-
-    st.success(parkinsons_diagnosis)
-
-
+            st.success("The person does not have Parkinson's disease")
