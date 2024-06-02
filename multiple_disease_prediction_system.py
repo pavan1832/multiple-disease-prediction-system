@@ -2,35 +2,34 @@ import pickle
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-diabetes_model = pickle.load(open("https://github.com/pavan1832/multiple-disease-prediction-system/blob/main/diabetes_model.sav", "rb"))
-heart_disease_model = pickle.load(open("https://github.com/pavan1832/multiple-disease-prediction-system/blob/main/heart_disease_model.sav", "rb"))
-parkinsons_model = pickle.load(open("https://github.com/pavan1832/multiple-disease-prediction-system/blob/main/parkinsons_model.sav", "rb"))
-
-
-
-# Sidebar menu
-with st.sidebar:
-    selected = option_menu(
-        'Multiple Disease Prediction System',
-        ['Diabetes Prediction', 'Heart Disease Prediction', 'Parkinsons Prediction'],
-        menu_icon='hospital-fill',
-        icons=['activity', 'heart', 'person'],
-        default_index=0
-    )
-
+# Function to show main page header
 def show_main_page():
-    st.title('Successfully logged in')
+    st.subheader('We Care Hospitals')
+    st.title('Successfully Logged in')
 
-# Diabetes Prediction Page
+
+
+# Display main page header
+show_main_page()
+
+# Sidebar for navigation
+with st.sidebar:
+    selected = option_menu('Multiple Disease Prediction System',
+                           ['Diabetes Prediction',
+                            'Heart Disease Prediction',
+                            'Parkinsons Prediction'],
+                           menu_icon='hospital-fill',
+                           icons=['activity', 'heart', 'person'],
+                           default_index=0)
+
+# Diabetes prediction system
 if selected == 'Diabetes Prediction':
     st.title('Diabetes Prediction using ML')
-
-    with st.form(key='diabetes_form'):
-        gender = st.selectbox('Gender', ['Female', 'Male'])
-
-        if gender == 'Male':
-            st.warning('Diabetes prediction for males does not require pregnancy information.')
-        else:
+    
+    gender = st.selectbox('Gender', ['Female', 'Male'])
+    
+    if gender == 'Female':
+        with st.form(key='diabetes_form_female'):
             pregnancies = st.number_input('Number of Pregnancies', min_value=0, step=1)
             glucose = st.number_input('Glucose Level')
             blood_pressure = st.number_input('Blood Pressure value')
@@ -41,16 +40,42 @@ if selected == 'Diabetes Prediction':
             age = st.number_input('Age of the Person', min_value=0, step=1)
 
             submitted = st.form_submit_button('Diabetes Test Result')
-            if submitted:
-                if any([pregnancies == 0, glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
-                    st.warning('Please fill in all details to get the Diabetes test result.')
+
+        if submitted:
+            if any([pregnancies == 0, glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
+                st.warning('Please fill in all details to get the Diabetes test result.')
+            else:
+                user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
+                diab_prediction = diabetes_model.predict([user_input])
+                if diab_prediction[0] == 1:
+                    st.success('The person is diabetic')
                 else:
-                    user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
-                    diab_prediction = diabetes_model.predict([user_input])
-                    if diab_prediction[0] == 1:
-                        st.success('The person is diabetic')
-                    else:
-                        st.success('The person is not diabetic')
+                    st.success('The person is not diabetic')
+
+    elif gender == 'Male':
+       
+        pregnancies = 0
+        with st.form(key='diabetes_form_male'):
+            glucose = st.number_input('Glucose Level')
+            blood_pressure = st.number_input('Blood Pressure value')
+            skin_thickness = st.number_input('Skin Thickness value')
+            insulin = st.number_input('Insulin Level')
+            bmi = st.number_input('BMI value')
+            diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value')
+            age = st.number_input('Age of the Person', min_value=0, step=1)
+
+            submitted = st.form_submit_button('Diabetes Test Result')
+
+        if submitted:
+            if any([glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
+                st.warning('Please fill in all details to get the Diabetes test result.')
+            else:
+                user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
+                diab_prediction = diabetes_model.predict([user_input])
+                if diab_prediction[0] == 1:
+                    st.success('The person is diabetic')
+                else:
+                    st.success('The person is not diabetic')
 
 # Heart Disease Prediction Page
 if selected == 'Heart Disease Prediction':
@@ -86,6 +111,7 @@ if selected == 'Heart Disease Prediction':
             thal_encoded = ['Normal', 'Fixed Defect', 'Reversible Defect'].index(thal)
 
             user_input = [age, sex_encoded, cp_encoded, trestbps, chol, fbs_encoded, restecg_encoded, thalach, exang_encoded, oldpeak, slope_encoded, ca, thal_encoded]
+
             heart_prediction = heart_disease_model.predict([user_input])
 
             if heart_prediction[0] == 1:
@@ -129,16 +155,16 @@ if selected == "Parkinsons Prediction":
 
         submitted = st.form_submit_button("Click below to view results")
 
+    parkinsons_diagnosis = ''
     if submitted:
-        user_input = [
-            jil, jia, ji_rap, ji_ppq, ddp, shi_loc, shi_db, shi_apq3, shi_apq5, shi_apq11, shi_dda, ac, nth, htn, med, men,
-            sta_dev, min_pit, max_pit, no, no_per, me_per, sta, fra, no_vb, deg, updrs, class_info
-        ]
-
+        user_input = [jil, jia, ji_rap, ji_ppq, ddp, shi_loc, shi_db, shi_apq3, shi_apq5, shi_apq11, shi_dda, ac, nth, htn, med, men, sta_dev, min_pit, max_pit, no, no_per, me_per, sta, fra, no_vb, deg, updrs, class_info]
         user_input = [float(x) for x in user_input]
+
         parkinsons_prediction = parkinsons_model.predict([user_input])
 
         if parkinsons_prediction[0] == 1:
-            st.success("The person has Parkinson's disease")
+            parkinsons_diagnosis = "The person has Parkinson's disease"
         else:
-            st.success("The person does not have Parkinson's disease")
+            parkinsons_diagnosis = "The person does not have Parkinson's disease"
+
+    st.success(parkinsons_diagnosis)
