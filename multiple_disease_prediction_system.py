@@ -7,7 +7,11 @@ def show_main_page():
     st.subheader('We Care Hospitals')
     st.title('Successfully Logged in')
 
-
+# Load models
+diabetes_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/diabetes_model.sav", "rb"))
+diabetes_models = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/diabetes_modelm.sav", "rb"))
+heart_disease_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/heart_disease_model.sav", "rb"))
+parkinsons_model = pickle.load(open("C:/Users/Pavan/OneDrive/Desktop/multiple decision system/saved models/parkinsons_model.sav", "rb"))
 
 # Display main page header
 show_main_page()
