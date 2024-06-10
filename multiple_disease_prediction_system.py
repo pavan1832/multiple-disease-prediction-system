@@ -14,17 +14,20 @@ parkinsons_model = pickle.load(open("parkinsons_model.sav", "rb"))
 # Display main page header
 show_main_page()
 
-# Sidebar for navigation
+# Sidebar menu
 with st.sidebar:
-    selected = option_menu('Multiple Disease Prediction System',
-                           ['Diabetes Prediction',
-                            'Heart Disease Prediction',
-                            'Parkinsons Prediction'],
-                           menu_icon='hospital-fill',
-                           icons=['activity', 'heart', 'person'],
-                           default_index=0)
+    selected = option_menu(
+        'Multiple Disease Prediction System',
+        ['Diabetes Prediction', 'Heart Disease Prediction', 'Parkinsons Prediction'],
+        menu_icon='hospital-fill',
+        icons=['activity', 'heart', 'person'],
+        default_index=0
+    )
 
-# Diabetes prediction system
+def show_main_page():
+    st.title('Successfully logged in')
+
+# Diabetes Prediction Page
 if selected == 'Diabetes Prediction':
     st.title('Diabetes Prediction using ML')
     
@@ -33,18 +36,18 @@ if selected == 'Diabetes Prediction':
     if gender == 'Female':
         with st.form(key='diabetes_form_female'):
             pregnancies = st.number_input('Number of Pregnancies', min_value=0, step=1)
-            glucose = st.number_input('Glucose Level')
-            blood_pressure = st.number_input('Blood Pressure value')
-            skin_thickness = st.number_input('Skin Thickness value')
-            insulin = st.number_input('Insulin Level')
-            bmi = st.number_input('BMI value')
-            diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value')
+            glucose = st.number_input('Glucose Level',min_value=0.0)
+            blood_pressure = st.number_input('Blood Pressure value',min_value=0.0)
+            skin_thickness = st.number_input('Skin Thickness value',min_value=0.0)
+            insulin = st.number_input('Insulin Level',min_value=0.0)
+            bmi = st.number_input('BMI value',min_value=0.0)
+            diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value',min_value=0.0)
             age = st.number_input('Age of the Person', min_value=0, step=1)
 
             submitted = st.form_submit_button('Diabetes Test Result')
 
         if submitted:
-            if any([pregnancies == 0, glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
+            if any([age == 0]):
                 st.warning('Please fill in all details to get the Diabetes test result.')
             else:
                 user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
@@ -58,18 +61,18 @@ if selected == 'Diabetes Prediction':
        
         pregnancies = 0
         with st.form(key='diabetes_form_male'):
-            glucose = st.number_input('Glucose Level')
-            blood_pressure = st.number_input('Blood Pressure value')
-            skin_thickness = st.number_input('Skin Thickness value')
-            insulin = st.number_input('Insulin Level')
-            bmi = st.number_input('BMI value')
-            diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value')
+            glucose = st.number_input('Glucose Level',min_value=0.0)
+            blood_pressure = st.number_input('Blood Pressure value',min_value=0.0)
+            skin_thickness = st.number_input('Skin Thickness value',min_value=0.0)
+            insulin = st.number_input('Insulin Level',min_value=0.0)
+            bmi = st.number_input('BMI value',min_value=0.0)
+            diabetes_pedigree_function = st.number_input('Diabetes Pedigree Function value',min_value=0.0)
             age = st.number_input('Age of the Person', min_value=0, step=1)
 
             submitted = st.form_submit_button('Diabetes Test Result')
 
         if submitted:
-            if any([glucose == 0, blood_pressure == 0, skin_thickness == 0, bmi == 0, diabetes_pedigree_function == 0, age == 0]):
+            if any([age == 0]):
                 st.warning('Please fill in all details to get the Diabetes test result.')
             else:
                 user_input = [pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age]
@@ -101,7 +104,7 @@ if selected == 'Heart Disease Prediction':
         submitted = st.form_submit_button('Heart Disease Test Result')
 
     if submitted:
-        if any([age == 0, trestbps == 0, chol == 0, thalach == 0, oldpeak == 0]):
+        if any([age == 0]):
             st.warning('Please fill in all required details to get the Heart Disease test result.')
         else:
             sex_encoded = 1 if sex == 'Male' else 0
@@ -155,7 +158,7 @@ if selected == "Parkinsons Prediction":
         updrs = st.number_input('UPDRS column', format="%.2f")
         class_info = st.number_input('Class information', format="%.2f")
 
-        submitted = st.form_submit_button("Click below to view results")
+        submitted = st.form_submit_button("Click here to view results")
 
     parkinsons_diagnosis = ''
     if submitted:
